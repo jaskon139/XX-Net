@@ -66,7 +66,7 @@ class CheckNetwork(object):
         self.continue_fail_count += 1
         # don't record last_check_time here, it's not a real check
         # last_check_time = time.time()
-
+  
         if self.continue_fail_count > 10:
             # don't set network_stat to "unknown", wait for check
             # network_stat = "unknown"
