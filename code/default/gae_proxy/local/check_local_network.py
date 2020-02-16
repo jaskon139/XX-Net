@@ -89,6 +89,7 @@ class CheckNetwork(object):
                 "accept-language": 'en-US,en;q=0.8,ja;q=0.6,zh-CN;q=0.4,zh;q=0.2',
                 "connection": "keep-alive"
                 }
+            print('xxxxxxxxx--------------------' + url)
             response = self.http_client.request("HEAD", url, header, "", read_payload=False)
             if response:
                 return True

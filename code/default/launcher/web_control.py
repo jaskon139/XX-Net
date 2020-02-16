@@ -26,8 +26,8 @@ xlog = getLogger("launcher")
 import module_init
 import config
 import autorun
-import update
-import update_from_github
+#import update
+#import update_from_github
 import simple_http_client
 import simple_http_server
 from simple_i18n import SimpleI18N
@@ -170,9 +170,9 @@ class Http_Handler(simple_http_server.HttpServerHandler):
                 os._exit(0)
             elif url_path == "/debug":
                 self.req_debug_handler()
-            elif url_path == '/restart':
-                self.send_response('text/html', '{"status":"success"}')
-                update_from_github.restart_xxnet()
+            # elif url_path == '/restart':
+            #     self.send_response('text/html', '{"status":"success"}')
+            #     update_from_github.restart_xxnet()
             else:
                 self.send_not_found()
                 xlog.info('%s "%s %s HTTP/1.1" 404 -', self.address_string(), self.command, self.path)
@@ -205,7 +205,7 @@ class Http_Handler(simple_http_server.HttpServerHandler):
         locale_dir = os.path.abspath(os.path.join(current_path, 'lang'))
         index_content = i18n_translator.render(locale_dir, os.path.join(current_path, "web_ui", "index.html"))
 
-        current_version = update_from_github.current_version()
+        current_version = "44444"  #update_from_github.current_version()
         menu_content = ''
         for module, v in module_menus:
             #xlog.debug("m:%s id:%d", module, v['menu_sort_id'])
@@ -272,8 +272,8 @@ class Http_Handler(simple_http_server.HttpServerHandler):
                 else:
                     config.set(["update", "skip_%s_version" % skip_version_type], skip_version)
                     config.save()
-                    if skip_version in update_from_github.update_info:
-                        update_from_github.update_info = ''
+                    # if skip_version in update_from_github.update_info:
+                    #     update_from_github.update_info = ''
                     data = '{"res":"success"}'
             elif 'check_update' in reqs:
                 check_update = reqs['check_update'][0]
@@ -281,7 +281,7 @@ class Http_Handler(simple_http_server.HttpServerHandler):
                     data = '{"res":"fail, check_update:%s"}' % check_update
                 else:
                     if config.get(["update", "check_update"]) != check_update:
-                        update_from_github.init_update_info(check_update)
+                        # update_from_github.init_update_info(check_update)
                         config.set(["update", "check_update"], check_update)
                         config.save()
 
@@ -447,9 +447,9 @@ class Http_Handler(simple_http_server.HttpServerHandler):
                     data = '{"res":"success"}'
             else:
                 data = '{"res":"fail"}'
-        elif reqs['cmd'] == ['get_version']:
-            current_version = update_from_github.current_version()
-            data = '{"current_version":"%s"}' % current_version
+        # elif reqs['cmd'] == ['get_version']:
+        #     current_version = update_from_github.current_version()
+        #     data = '{"current_version":"%s"}' % current_version
 
         self.send_response('text/html', data)
 
@@ -459,21 +459,21 @@ class Http_Handler(simple_http_server.HttpServerHandler):
         data = ''
 
         if reqs['cmd'] == ['get_info']:
-            data = update_from_github.update_info
+            data = "2222" #update_from_github.update_info
             if data == '' or data[0] != '{':
                 data = '{"type":"%s"}' % data
         elif reqs['cmd'] == ['set_info']:
-            update_from_github.update_info = reqs['info'][0]
+            #update_from_github.update_info = reqs['info'][0]
             data = '{"res":"success"}'
         elif reqs['cmd'] == ['start_check']:
-            update_from_github.init_update_info(reqs['check_update'][0])
+            #update_from_github.init_update_info(reqs['check_update'][0])
             update.check_update()
             data = '{"res":"success"}'
         elif reqs['cmd'] == ['get_progress']:
-            data = json.dumps(update_from_github.progress)
+            data = "444" #json.dumps(update_from_github.progress)
         elif reqs['cmd'] == ['get_new_version']:
-            current_version = update_from_github.current_version()
-            github_versions = update_from_github.get_github_versions()
+            current_version = "444"  #update_from_github.current_version()
+            github_versions = "4444"  #update_from_github.get_github_versions()
             data = '{"res":"success", "test_version":"%s", "stable_version":"%s", "current_version":"%s"}' % (github_versions[0][1], github_versions[1][1], current_version)
             xlog.info("%s", data)
         elif reqs['cmd'] == ['update_version']:
@@ -483,28 +483,28 @@ class Http_Handler(simple_http_server.HttpServerHandler):
             if 'checkhash' in reqs and reqs['checkhash'][0] == '0':
                 checkhash = 0
 
-            update_from_github.start_update_version(version, checkhash)
+            #update_from_github.start_update_version(version, checkhash)
             data = '{"res":"success"}'
         elif reqs['cmd'] == ['set_localversion']:
             version = reqs['version'][0]
 
-            if update_from_github.update_current_version(version):
-                data = '{"res":"success"}'
-            else:
-                data = '{"res":"false", "reason": "version not exist"}'
+            # if update_from_github.update_current_version(version):
+            #     data = '{"res":"success"}'
+            # else:
+            #     data = '{"res":"false", "reason": "version not exist"}'
         elif reqs['cmd'] == ['get_localversions']:
-            local_versions = update_from_github.get_local_versions()
+            #local_versions = update_from_github.get_local_versions()
 
-            s = ""
-            for v in local_versions:
-                if not s == "":
-                    s += ","
-                s += ' { "v":"%s" , "folder":"%s" } ' % (v[0], v[1])
+            # s = ""
+            # for v in local_versions:
+            #     if not s == "":
+            #         s += ","
+            #     s += ' { "v":"%s" , "folder":"%s" } ' % (v[0], v[1])
             data = '[  %s  ]' % (s)
         elif reqs['cmd'] == ['del_localversion']:
-            if update_from_github.del_version(reqs['version'][0]):
-                data = '{"res":"success"}'
-            else:
+            # if update_from_github.del_version(reqs['version'][0]):
+            #     data = '{"res":"success"}'
+            # else:
                 data = '{"res":"fail"}'
 
         self.send_response('text/html', data)

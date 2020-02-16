@@ -185,10 +185,10 @@ except Exception as e1:
 import config
 import web_control
 import module_init
-import update
+#import update
 import setup_win_python
-import update_from_github
-import download_modules
+#import update_from_github
+#import download_modules
 
 
 def exit_handler():
@@ -211,17 +211,17 @@ def main():
         import win_compat_suggest
         win_compat_suggest.main()
 
-    current_version = update_from_github.current_version()
+    #current_version = update_from_github.current_version()
 
-    xlog.info("start XX-Net %s", current_version)
+    #xlog.info("start XX-Net %s", current_version)
 
     web_control.confirm_xxnet_not_running()
 
     setup_win_python.check_setup()
 
-    import post_update
-    post_update.check()
-    download_modules.start_download()
+    #import post_update
+    #post_update.check()
+    #download_modules.start_download()
 
     allow_remote = 0
     if len(sys.argv) > 1:
@@ -239,9 +239,9 @@ def main():
         import webbrowser
         webbrowser.open("http://localhost:%s/" % host_port)
 
-    update.start()
+    #update.start()
 
-    update_from_github.cleanup()
+    #update_from_github.cleanup()
 
     if config.get(["modules", "launcher", "show_systray"], 1):
         sys_tray.serve_forever()

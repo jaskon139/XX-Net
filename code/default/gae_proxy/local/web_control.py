@@ -29,7 +29,7 @@ xlog = getLogger("gae_proxy")
 from config import config, direct_config
 import check_local_network
 import cert_util
-import ipv6_tunnel
+#import ipv6_tunnel
 from front import front, direct_front
 
 current_path = os.path.dirname(os.path.abspath(__file__))
@@ -152,7 +152,7 @@ class ControlHandler(simple_http_server.HttpServerHandler):
         elif path == "/debug":
             return self.req_debug_handler()
         elif path.startswith("/ipv6_tunnel"):
-            return self.req_ipv6_tunnel_handler()
+            return ""   #self.req_ipv6_tunnel_handler()
         elif path == "/quit":
             front.stop()
             direct_front.stop()
@@ -727,62 +727,63 @@ class ControlHandler(simple_http_server.HttpServerHandler):
         self.send_response_nc(mimetype, data)
 
     def req_ipv6_tunnel_handler(self):
-        req = urlparse.urlparse(self.path).query
-        reqs = urlparse.parse_qs(req, keep_blank_values=True)
-        data = ''
+        # req = urlparse.urlparse(self.path).query
+        # reqs = urlparse.parse_qs(req, keep_blank_values=True)
+        # data = ''
 
-        log_path = os.path.join(data_path, "ipv6_tunnel.log")
-        time_now = datetime.datetime.today().strftime('%H:%M:%S-%a/%d/%b/%Y')
+        # log_path = os.path.join(data_path, "ipv6_tunnel.log")
+        # time_now = datetime.datetime.today().strftime('%H:%M:%S-%a/%d/%b/%Y')
 
-        client_ip = self.client_address[0]
-        is_local = client_ip.endswith("127.0.0.1") or client_ip == "::1"
+        # client_ip = self.client_address[0]
+        # is_local = client_ip.endswith("127.0.0.1") or client_ip == "::1"
 
-        if reqs['cmd'] in [['enable'],
-                           ['disable'],
-                           ['test_teredo'],
-                           ['test_teredo_usability'],
-                           ['test_teredo_server'],
-                           ['set_best_server']]:
-            cmd = reqs['cmd'][0]
-            xlog.info("ipv6_tunnel switch %s", cmd)
+        # if reqs['cmd'] in [['enable'],
+        #                    ['disable'],
+        #                    ['test_teredo'],
+        #                    ['test_teredo_usability'],
+        #                    ['test_teredo_server'],
+        #                    ['set_best_server']]:
+        #     cmd = reqs['cmd'][0]
+        #     xlog.info("ipv6_tunnel switch %s", cmd)
 
-            # Don't remove log file at here.
+        #     # Don't remove log file at here.
 
-            if cmd == "enable":
-                result = ipv6_tunnel.enable(is_local)
-            elif cmd == "disable":
-                result = ipv6_tunnel.disable(is_local)
-            elif cmd == "test_teredo":
-                result = ipv6_tunnel.test_teredo()
-            elif cmd == "test_teredo_usability":
-                result = ipv6_tunnel.test_teredo(probe_server=False)
-            elif cmd == "test_teredo_server":
-                result = ipv6_tunnel.test_teredo(probe_nat=False)
-            elif cmd == "set_best_server":
-                result = ipv6_tunnel.set_best_server(is_local)
-            else:
-                xlog.warn("unknown cmd:%s", cmd)
+        #     if cmd == "enable":
+        #         result = ipv6_tunnel.enable(is_local)
+        #     elif cmd == "disable":
+        #         result = ipv6_tunnel.disable(is_local)
+        #     elif cmd == "test_teredo":
+        #         result = ipv6_tunnel.test_teredo()
+        #     elif cmd == "test_teredo_usability":
+        #         result = ipv6_tunnel.test_teredo(probe_server=False)
+        #     elif cmd == "test_teredo_server":
+        #         result = ipv6_tunnel.test_teredo(probe_nat=False)
+        #     elif cmd == "set_best_server":
+        #         result = ipv6_tunnel.set_best_server(is_local)
+        #     else:
+        #         xlog.warn("unknown cmd:%s", cmd)
 
-            xlog.info("ipv6_tunnel switch %s, result: %s", cmd, result)
+        #     xlog.info("ipv6_tunnel switch %s, result: %s", cmd, result)
 
-            data = json.dumps({'res': result, 'time': time_now})
+        #     data = json.dumps({'res': result, 'time': time_now})
 
-        elif reqs['cmd'] == ['get_log']:
-            if os.path.isfile(log_path):
-                with open(log_path, "r") as f:
-                    content = f.read()
-            else:
-                content = ""
+        # elif reqs['cmd'] == ['get_log']:
+        #     if os.path.isfile(log_path):
+        #         with open(log_path, "r") as f:
+        #             content = f.read()
+        #     else:
+        #         content = ""
 
-            status = ipv6_tunnel.state()
+        #     status = ipv6_tunnel.state()
 
-            data = json.dumps({'status': status, 'log': content.decode("GBK"), 'time': time_now})
+        #     data = json.dumps({'status': status, 'log': content.decode("GBK"), 'time': time_now})
 
-        elif reqs['cmd'] == ['get_priority']:
-            data = json.dumps({'res': ipv6_tunnel.state_pp(), 'time': time_now})
+        # elif reqs['cmd'] == ['get_priority']:
+        #     data = json.dumps({'res': ipv6_tunnel.state_pp(), 'time': time_now})
 
-        elif reqs['cmd'] == ['switch_pp']:
-            data = json.dumps({'res': ipv6_tunnel.switch_pp(), 'time': time_now})
+        # elif reqs['cmd'] == ['switch_pp']:
+        #     data = json.dumps({'res': ipv6_tunnel.switch_pp(), 'time': time_now})
 
-        self.send_response_nc('text/html', data)
+        # self.send_response_nc('text/html', data)
+        return "sdfsdf"
 

@@ -12,7 +12,7 @@ config_path = os.path.join(data_path, 'launcher', 'config.yaml')
 
 config = {}
 need_save_config = False
-modules = ["gae_proxy", "launcher", "x_tunnel", "smart_router"]
+modules = ["gae_proxy", "launcher"] #, "x_tunnel", "smart_router"]
 
 
 def load():

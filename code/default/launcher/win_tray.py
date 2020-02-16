@@ -17,7 +17,7 @@ import ctypes
 import _winreg as winreg
 import win32_proxy_manager
 import module_init
-import update
+#import update
 import config
 
 from xlog import getLogger
@@ -134,7 +134,8 @@ class Win_tray():
         module_init.start_all_auto()
 
     def on_check_update(self, widget=None, data=None):
-        update.check_update()
+        print("hello")
+        #update.check_update()
 
     def on_enable_gae_proxy(self, widget=None, data=None):
         win32_proxy_manager.set_proxy("127.0.0.1:8087")
